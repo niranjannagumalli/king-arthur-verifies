@@ -59,7 +59,7 @@ async function home(request: Request) {
       // input at the top.
       type: 4,
       data: {
-        content: `Hello, ${value}!`,
+        content: `Hello, I'm alive!`,
       },
     });
   }
