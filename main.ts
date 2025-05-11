@@ -54,34 +54,35 @@ async function home(request: Request) {
   // Type 2 in a request is an ApplicationCommand interaction.
   // It implies that a user has issued a command.
   if (type === 2) {
-    //const { value } = data.options.find((option) => option.name === "name");
-    // return json({
-    //   // Type 4 responds with the below message retaining the user's
-    //   // input at the top.
-    //   type: 4,
-    //   data: {
-    //     content: `Hello, I'm alive !`,
-    //   },
-    // });
-    const emailOption = data.options.find((option) => option.name === "name");
-    if (!emailOption) {
-      return json({
-        type: 4,
-        data: { content: "Please provide an email." },
-      });
-    }
-
-    const email = emailOption.value;
-    const name = await findNameByEmail(email);
-
+    const { value } = data.options.find((option) => option.name === "name");
     return json({
+      // Type 4 responds with the below message retaining the user's
+      // input at the top.
       type: 4,
       data: {
-        content: name
-          ? `The name associated with ${email} is ${name}.`
-          : `No user found with email ${email}.`,
+        content: `Hello, I'm alive !`,
       },
     });
+
+    // const emailOption = data.options.find((option) => option.name === "name");
+    // if (!emailOption) {
+    //   return json({
+    //     type: 4,
+    //     data: { content: "Please provide an email." },
+    //   });
+    // }
+
+    // const email = emailOption.value;
+    // const name = await findNameByEmail(email);
+
+    // return json({
+    //   type: 4,
+    //   data: {
+    //     content: name
+    //       ? `The name associated with ${email} is ${name}.`
+    //       : `No user found with email ${email}.`,
+    //   },
+    // });
 
   }
 
