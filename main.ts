@@ -10,6 +10,7 @@ import {
 // from Discord.
 import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
 
+import { getSpreadsheet } from "./sheet.ts";
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
   "/": home,
@@ -53,15 +54,35 @@ async function home(request: Request) {
   // Type 2 in a request is an ApplicationCommand interaction.
   // It implies that a user has issued a command.
   if (type === 2) {
-    const { value } = data.options.find((option) => option.name === "name");
+    //const { value } = data.options.find((option) => option.name === "name");
+    // return json({
+    //   // Type 4 responds with the below message retaining the user's
+    //   // input at the top.
+    //   type: 4,
+    //   data: {
+    //     content: `Hello, I'm alive !`,
+    //   },
+    // });
+    const emailOption = data.options.find((option) => option.name === "name");
+    if (!emailOption) {
+      return json({
+        type: 4,
+        data: { content: "Please provide an email." },
+      });
+    }
+
+    const email = emailOption.value;
+    const name = await findNameByEmail(email);
+
     return json({
-      // Type 4 responds with the below message retaining the user's
-      // input at the top.
       type: 4,
       data: {
-        content: `Hello, I'm alive!`,
+        content: name
+          ? `The name associated with ${email} is ${name}.`
+          : `No user found with email ${email}.`,
       },
     });
+
   }
 
   // We will return a bad request error as a valid Discord request
@@ -92,4 +113,13 @@ function hexToUint8Array(hex: string) {
   return new Uint8Array(
     hex.match(/.{1,2}/g)!.map((val) => parseInt(val, 16)),
   );
+}
+async function findNameByEmail(email: string): Promise<string | null> {
+  const sheet = await getSpreadsheet();
+  await sheet.loadInfo();
+  const ws = sheet.sheetsByIndex[0];
+  const rows = await ws.getRows();
+
+  const match = rows.find((row) => row.get("email") === email);
+  return match ? row.get("name") : null;
 }
