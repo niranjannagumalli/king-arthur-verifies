@@ -51,7 +51,7 @@ async function home(request: Request) {
         if (status === "TRUE") {
             // If the verification status is true, attempt to assign the role.
             const roleId = Deno.env.get("DISCORD_ROLE_ID"); // Get the Role ID from environment variables
-            const guildId = guild_id;  // guild_id is part of the incoming payload
+            const guildId = Deno.env.get("DISCORD_GUILD_ID");  // guild_id is part of the incoming payload
             const userId = member.user.id; // member object contains user id.
 
             if (!roleId) {
