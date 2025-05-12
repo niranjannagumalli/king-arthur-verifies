@@ -45,7 +45,7 @@ async function getUserRows(): Promise<UsersRowData[]> {
   return rows;
 }
 // Get the "Verified?" status for a specific email
-export async function getVerificationStatus(email: string): Promise<string | null> {
+export async function getVerificationStatus(email: string): Promise<string> {
   const rows = await getUserRows();
 
   for (const row of rows) {
@@ -54,8 +54,7 @@ export async function getVerificationStatus(email: string): Promise<string | nul
     }
   }
 
-  return null; // Email not found
+  return "not founc"; // Email not found
 }
 
-const status = await getVerificationStatus("niranjannagumalli@gmail.com");
-console.log(status); // "TRUE", "FALSE", or null if email not found
+
