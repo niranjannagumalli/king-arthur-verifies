@@ -33,7 +33,7 @@ async function home(request: Request) {
             },
         );
     }
-
+    console.log(body)
     const { type = 0, data = { options: []} } = JSON.parse(body);
     // Discord performs Ping interactions to test our application.
     if (type === 1) {
