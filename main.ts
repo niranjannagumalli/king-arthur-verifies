@@ -146,6 +146,8 @@ async function assignRole(guildId: string, userId: string, roleId: string) {
 }
 
 async function deleteOriginalInteractionMessage(applicationId:string, interactionToken:string) {
+    const applicationId = applicationId;
+    const interactionToken = interactionToken;
     const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
     if (!BOT_TOKEN) {
         throw new Error("DISCORD_BOT_TOKEN is not defined in the environment.");
