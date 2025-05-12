@@ -56,6 +56,3 @@ export async function getVerificationStatus(email: string): Promise<string | nul
 
   return null; // Email not found
 }
-
-const status = await getVerificationStatus("niranjannagumalli@gmail.com");
-console.log(status); // "TRUE", "FALSE", or null if email not found

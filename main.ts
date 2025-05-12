@@ -9,8 +9,8 @@ import {
 // TweetNaCl is a cryptography library that we use to verify requests
 // from Discord.
 import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
-import { getVerificationStatus } from "./test.ts";
-import { getSpreadsheet } from "./sheet.ts";
+import { getVerificationStatus } from "./sheet.ts";
+
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
   "/": home,
