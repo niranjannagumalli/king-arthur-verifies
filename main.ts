@@ -33,8 +33,8 @@ async function home(request: Request) {
             },
         );
     }
-    const payload = JSON.parse(body);
-    const { type = 0, data = { options: []} } = payload;
+    
+    const { type = 0, data = { options: []}, token, application_id, guild_id, member = {user:[]} } =  JSON.parse(body);
     // Discord performs Ping interactions to test our application.
     if (type === 1) {
         return json({
@@ -44,16 +44,19 @@ async function home(request: Request) {
 
     if (type === 2) {
         const { value } = data.options.find((option) => option.name === "email");
+
         const status = await getVerificationStatus(value);
 
         let responseContent = `Hello ${value}, The status of your registration is ${status}`;
-
+        const interactionToken = token;
+        const applicationId = application_id;
         if (status === "TRUE") {
             // If the verification status is true, attempt to assign the role.
             const roleId = Deno.env.get("DISCORD_ROLE_ID"); // Get the Role ID from environment variables
             // const guildId = Deno.env.get("DISCORD_GUILD_ID");  // guild_id is part of the incoming payload
-            const guildId = payload.guild_id;
-            const userId = payload.member.user.id; // member object contains user id.
+            const guildId = guild_id;
+            const userId = member.user.id; // member object contains user id.
+            
 
             if (!roleId) {
                 console.error("DISCORD_ROLE_ID is not defined in the environment.");
@@ -69,11 +72,13 @@ async function home(request: Request) {
             try {
                 await assignRole(guildId, userId, roleId);
                 responseContent = `Hello ${value}, The status of your registration is ${status}. You have been assigned the verified role!`;
+                
             } catch (error) {
                 console.error("Error assigning role:", error);
                 responseContent += `, but I encountered an error assigning the role: ${error.message}`;
             }
         }
+        await deleteOriginalInteractionMessage(applicationId, interactionToken);
 
         return json({
             type: 4,
@@ -130,4 +135,25 @@ async function assignRole(guildId: string, userId: string, roleId: string) {
         throw new Error(`Failed to assign role: ${response.status} - ${JSON.stringify(errorData)}`);
     }
     // A successful role assignment typically returns a 204 No Content, so we don't need to parse JSON.
+}
+
+async function deleteOriginalInteractionMessage(applicationId:string, interactionToken:string) {
+    const BOT_TOKEN = Deno.env.get("DISCORD_BOT_TOKEN");
+    if (!BOT_TOKEN) {
+        throw new Error("DISCORD_BOT_TOKEN is not defined in the environment.");
+    }
+    const url = `${DISCORD_API_ENDPOINT}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+    const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bot ${BOT_TOKEN}`,
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error deleting interaction response:", errorData);
+        throw new Error(`Failed to delete interaction response: ${response.status} - ${JSON.stringify(errorData)}`);
+    }
+    
 }
