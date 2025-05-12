@@ -53,7 +53,7 @@ async function home(request: Request) {
             const roleId = Deno.env.get("DISCORD_ROLE_ID"); // Get the Role ID from environment variables
             // const guildId = Deno.env.get("DISCORD_GUILD_ID");  // guild_id is part of the incoming payload
             const guildId = data.guild_id;
-            const userId = data.user.id; // member object contains user id.
+            const userId = data.member.user.id; // member object contains user id.
 
             if (!roleId) {
                 console.error("DISCORD_ROLE_ID is not defined in the environment.");
