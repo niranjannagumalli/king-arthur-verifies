@@ -9,7 +9,7 @@ import {
 // TweetNaCl is a cryptography library that we use to verify requests
 // from Discord.
 import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
-
+import { getVerificationStatus } from "./test.ts";
 import { getSpreadsheet } from "./sheet.ts";
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -55,34 +55,16 @@ async function home(request: Request) {
   // It implies that a user has issued a command.
   if (type === 2) {
     const { value } = data.options.find((option) => option.name === "name");
+    const status = await getVerificationStatus(value);
     return json({
       // Type 4 responds with the below message retaining the user's
       // input at the top.
       type: 4,
       data: {
-        content: `Hello, I'm alive !`,
+        content: `Hello, The status of ${value} is ${status}`,
       },
     });
 
-    // const emailOption = data.options.find((option) => option.name === "name");
-    // if (!emailOption) {
-    //   return json({
-    //     type: 4,
-    //     data: { content: "Please provide an email." },
-    //   });
-    // }
-
-    // const email = emailOption.value;
-    // const name = await findNameByEmail(email);
-
-    // return json({
-    //   type: 4,
-    //   data: {
-    //     content: name
-    //       ? `The name associated with ${email} is ${name}.`
-    //       : `No user found with email ${email}.`,
-    //   },
-    // });
 
   }
 
@@ -114,13 +96,4 @@ function hexToUint8Array(hex: string) {
   return new Uint8Array(
     hex.match(/.{1,2}/g)!.map((val) => parseInt(val, 16)),
   );
-}
-async function findNameByEmail(email: string): Promise<string | null> {
-  const sheet = await getSpreadsheet();
-  await sheet.loadInfo();
-  const ws = sheet.sheetsByIndex[0];
-  const rows = await ws.getRows();
-
-  const match = rows.find((row) => row.get("email") === email);
-  return match ? row.get("name") : null;
 }
