@@ -55,13 +55,13 @@ async function home(request: Request) {
   // It implies that a user has issued a command.
   if (type === 2) {
     const { value } = data.options.find((option) => option.name === "name");
-    const status = await getVerificationStatus(value);
+    // const status = await getVerificationStatus(value);
     return json({
       // Type 4 responds with the below message retaining the user's
       // input at the top.
       type: 4,
       data: {
-        content: `Hello, The status of ${value} is ${status}`,
+        content: `Hello, The status of ${value} is `,
       },
     });
 
