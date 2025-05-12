@@ -7,7 +7,7 @@ import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
 import { getVerificationStatus } from "./sheet.ts";
 
 // Discord API endpoint for adding a role to a user in a guild.
-const DISCORD_API_ENDPOINT = "https://discord.com/api/v10";
+const DISCORD_API_ENDPOINT = "https://discord.com/api/";
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -146,11 +146,10 @@ async function assignRole(guildId: string, userId: string, roleId: string) {
 }
 
 async function deleteOriginalInteractionMessage(applicationId:string, interactionToken:string) {
-    const applicationId = applicationId;
-    const interactionToken = interactionToken;
+    
     const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
     if (!BOT_TOKEN) {
-        throw new Error("DISCORD_BOT_TOKEN is not defined in the environment.");
+        throw new Error("BOT_TOKEN is not defined in the environment.");
     }
     const url = `${DISCORD_API_ENDPOINT}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
     const response = await fetch(url, {
