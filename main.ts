@@ -78,7 +78,15 @@ async function home(request: Request) {
                 responseContent += `, but I encountered an error assigning the role: ${error.message}`;
             }
         }
-        await deleteOriginalInteractionMessage(applicationId, interactionToken);
+        try{
+            await deleteOriginalInteractionMessage(applicationId, interactionToken);
+        }
+        catch(error)
+        {
+            console.error("Error deleting message:", error)
+            responseContent+=". Couldn't delete your message. Please delete your message so that your email address can not be seen by others."
+        }
+        
 
         return json({
             type: 4,
@@ -138,7 +146,7 @@ async function assignRole(guildId: string, userId: string, roleId: string) {
 }
 
 async function deleteOriginalInteractionMessage(applicationId:string, interactionToken:string) {
-    const BOT_TOKEN = Deno.env.get("DISCORD_BOT_TOKEN");
+    const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
     if (!BOT_TOKEN) {
         throw new Error("DISCORD_BOT_TOKEN is not defined in the environment.");
     }
