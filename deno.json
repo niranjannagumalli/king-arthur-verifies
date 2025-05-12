@@ -1,5 +1,13 @@
 {
   "imports": {
     "discord.js": "npm:discord.js@^14.19.3"
+  },
+  "deploy": {
+    "project": "b2dee1ca-ab42-4cb5-88eb-025fba366896",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }
