@@ -33,8 +33,8 @@ async function home(request: Request) {
             },
         );
     }
-    console.log(body)
-    const { type = 0, data = { options: []} } = JSON.parse(body);
+    const payload = JSON.parse(body);
+    const { type = 0, data = { options: []} } = payload;
     // Discord performs Ping interactions to test our application.
     if (type === 1) {
         return json({
@@ -52,8 +52,8 @@ async function home(request: Request) {
             // If the verification status is true, attempt to assign the role.
             const roleId = Deno.env.get("DISCORD_ROLE_ID"); // Get the Role ID from environment variables
             // const guildId = Deno.env.get("DISCORD_GUILD_ID");  // guild_id is part of the incoming payload
-            const guildId = data.guild_id;
-            const userId = data.member.user.id; // member object contains user id.
+            const guildId = payload.guild_id;
+            const userId = payload.member.user.id; // member object contains user id.
 
             if (!roleId) {
                 console.error("DISCORD_ROLE_ID is not defined in the environment.");
