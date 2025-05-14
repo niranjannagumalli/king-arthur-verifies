@@ -65,6 +65,7 @@ async function home(request: Request) {
                     type: 4,
                     data: {
                         content: responseContent,
+                        flags:64,
                     },
                 });
             }
@@ -79,7 +80,7 @@ async function home(request: Request) {
             }
         }
         try{
-            await deleteOriginalInteractionMessage(applicationId, interactionToken);
+            // await deleteOriginalInteractionMessage(applicationId, interactionToken);
         }
         catch(error)
         {
@@ -92,6 +93,7 @@ async function home(request: Request) {
             type: 4,
             data: {
                 content: responseContent,
+                flags:64,
             },
         });
     }
