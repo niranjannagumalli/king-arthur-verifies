@@ -45,7 +45,8 @@ async function home(request: Request) {
     if (type === 2) {
         const { value } = data.options.find((option) => option.name === "email");
 
-        const status = await getVerificationStatus(value);
+        const payload = await getVerificationStatus(value);
+        const status = payload.verified;
 
         let responseContent = `Hello ${value}, The status of your registration is ${status}`;
         const interactionToken = token;
@@ -75,6 +76,8 @@ async function home(request: Request) {
             try {
                 await assignRole(guildId, userId, roleId);
                 responseContent = `Hello ${value}, The status of your registration is ${status}. You have been assigned the verified role!`;
+                const introChannelId = Deno.env.get("INTRODUCTION_CHANNEL_ID")
+                await sendIntroMessage(introChannelId, payload.bio, payload.linkedin);
                 
             } catch (error) {
                 console.error("Error assigning role:", error);
@@ -149,24 +152,29 @@ async function  assignRole(guildId: string, userId: string, roleId: string) {
     // A successful role assignment typically returns a 204 No Content, so we don't need to parse JSON.
 }
 
-async function deleteOriginalInteractionMessage(applicationId:string, interactionToken:string) {
-    
+async function sendIntroMessage(channelId: string, bio: string, linkedin: string) {
     const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
     if (!BOT_TOKEN) {
         throw new Error("BOT_TOKEN is not defined in the environment.");
     }
-    const url = `${DISCORD_API_ENDPOINT}/webhooks/${applicationId}/${interactionToken}/messages/@original`;
+
+    const url = `${DISCORD_API_ENDPOINT}/channels/${channelId}/messages`;
+
+    const responseContent = `Hello ${value}!\n✅ Verified: ${result.verified}\n🔗 LinkedIn: ${result.linkedin}\n📝 Bio: ${result.bio}`;
     const response = await fetch(url, {
-        method: "DELETE",
+        method: "POST",
         headers: {
             "Authorization": `Bot ${BOT_TOKEN}`,
+            "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+            responseContent,
+        }),
     });
 
     if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error deleting interaction response:", errorData);
-        throw new Error(`Failed to delete interaction response: ${response.status} - ${JSON.stringify(errorData)}`);
+        console.error("Failed to send intro message:", errorData);
+        throw new Error(`Failed to send intro message: ${response.status} - ${JSON.stringify(errorData)}`);
     }
-    
 }
