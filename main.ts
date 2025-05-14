@@ -161,6 +161,7 @@ async function sendIntroMessage(channelId: string, bio: string, linkedin: string
     const url = `${DISCORD_API_ENDPOINT}/channels/${channelId}/messages`;
 
     const responseContent = `Hello!\n🔗 LinkedIn: ${linkedin}\n📝 Bio: ${bio}`;
+    console.log(responseContent);
     const response = await fetch(url, {
         method: "POST",
         headers: {
