@@ -36,7 +36,7 @@
     return rows;
   }
   // Get the "Verified?" status for a specific email
-  export async function getVerificationStatus(email: string): Promise<{ verified: string; linkedin: string; bio: string} | "not founc"> {
+  export async function getVerificationStatus(email: string): Promise<{ verified: string; linkedin: string; bio: string} | "FALSE"> {
     const rows = await getUserRows();
     for (const row of rows) {
       if (row.get("Email Address") === email) {
