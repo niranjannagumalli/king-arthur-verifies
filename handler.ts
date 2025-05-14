@@ -1,7 +1,7 @@
 import { json, validateRequest } from "https://deno.land/x/sift@0.6.0/mod.ts";
 import { verifySignature } from "./signature.ts";
 import { getVerificationStatus } from "./sheet.ts";
-import { assignRole, sendIntroMessage } from "./discord_api.ts";
+import { assignRole, sendIntroMessage } from "./discordApi.ts";
 import { DISCORD_ROLE_ID, INTRODUCTION_CHANNEL_ID } from "./env.ts";
 
 export async function home(request: Request) {
