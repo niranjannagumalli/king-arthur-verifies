@@ -76,7 +76,7 @@ async function home(request: Request) {
             try {
                 await assignRole(guildId, userId, roleId);
                 responseContent = `Hello ${value}, The status of your registration is ${status}. You have been assigned the verified role!`;
-                const introChannelId = Deno.env.get("INTRODUCTION_CHANNEL_ID")
+                const introChannelId = Deno.env.get("INTRODUCTION_CHANNEL_ID");
                 await sendIntroMessage(introChannelId, payload.bio, payload.linkedin);
                 
             } catch (error) {
