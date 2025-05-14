@@ -50,7 +50,7 @@ async function home(request: Request) {
         let responseContent = `Hello ${value}, The status of your registration is ${status}`;
         const interactionToken = token;
         const applicationId = application_id;
-        consol
+        
         if (status === "TRUE") {
             // If the verification status is true, attempt to assign the role.
             const roleId = Deno.env.get("DISCORD_ROLE_ID"); // Get the Role ID from environment variables
