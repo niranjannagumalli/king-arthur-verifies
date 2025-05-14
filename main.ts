@@ -168,9 +168,9 @@ async function sendIntroMessage(channelId: string, bio: string, linkedin: string
             "Authorization": `Bot ${BOT_TOKEN}`,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            responseContent,
-        }),
+        body: {
+            content:responseContent,
+        },
     });
 
     if (!response.ok) {
