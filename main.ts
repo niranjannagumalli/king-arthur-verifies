@@ -7,7 +7,7 @@ import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
 import { getVerificationStatus } from "./sheet.ts";
 
 // Discord API endpoint for adding a role to a user in a guild.
-const DISCORD_API_ENDPOINT = "https://discord.com/api/";
+const DISCORD_API_ENDPOINT = "https://discord.com/api/v10/";
 
 // For all requests to "/" endpoint, we want to invoke home() handler.
 serve({
@@ -124,7 +124,7 @@ function hexToUint8Array(hex: string) {
 }
 
 // Function to assign a role to a user in a Discord guild.
-async function assignRole(guildId: string, userId: string, roleId: string) {
+async function  assignRole(guildId: string, userId: string, roleId: string) {
     const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
     if (!BOT_TOKEN) {
         throw new Error("BOT_TOKEN is not defined in the environment.");

@@ -40,7 +40,7 @@
 
   async function getUserRows(): Promise<UsersRowData[]> {
     const doc = await getAuthenticatedDoc();
-    const sheet = doc.sheetsByIndex[1];
+    const sheet = doc.sheetsByIndex[0];
     const rows = await sheet.getRows<UsersRowData>();
     return rows;
   }
