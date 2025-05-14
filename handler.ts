@@ -70,14 +70,10 @@ export async function home(request: Request) {
                 responseContent += `, but I encountered an error assigning the role: ${error.message}`;
             }
         }
-        try {
-            // await deleteOriginalInteractionMessage(applicationId, interactionToken);
+        else
+        {
+            responseContent = "Hello, We did not find your email in the database. Could you please retry with your correct email id which you have filled in the form?"
         }
-        catch (error) {
-            console.error("Error deleting message:", error);
-            responseContent += ". Couldn't delete your message. Please delete your message so that your email address can not be seen by others.";
-        }
-
 
         return json({
             type: 4,

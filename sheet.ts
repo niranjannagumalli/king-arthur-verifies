@@ -52,7 +52,7 @@
       }
     }
 
-    return "not found"; // Email not found
+    return "FALSE"; // Email not found
   }
 
 
