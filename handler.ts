@@ -37,11 +37,10 @@ export async function home(request: Request) {
     const { value } = data.options.find((option) => option.name === "email");
 
     const payload = await getVerificationStatus(value);
-    const status = payload.verified;
     let responseContent = "";
-    if (status === "Already Verified") {
+    if (payload === "Already Verified") {
       responseContent += "Looks like you're already verified.";
-    } else if (status === "TRUE") {
+    } else if (payload.verified === "TRUE") {
       // If the verification status is true, attempt to assign the role.
       const roleId = DISCORD_ROLE_ID; // Get the Role ID from environment variables
       const guildId = guild_id;
