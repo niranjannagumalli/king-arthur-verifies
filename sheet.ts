@@ -14,7 +14,6 @@
     // see "Authentication" section in docs for more info
     email: Deno.env.get("CLIENT_EMAIL")! || env.CLIENT_EMAIL,
     key: atob(Deno.env.get("PRIVATE_KEY"))!|| atob(env.PRIVATE_KEY),
-    // key: atob(env.PRIVATE_KEY),
     scopes: ["https://www.googleapis.com/auth/spreadsheets",
     ],
   });

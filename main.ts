@@ -5,7 +5,8 @@ import {
 } from "https://deno.land/x/sift@0.6.0/mod.ts";
 import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
 import { getVerificationStatus } from "./sheet.ts";
-
+import { env } from "node:process";
+import { load } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
 // Discord API endpoint for adding a role to a user in a guild.
 const DISCORD_API_ENDPOINT = "https://discord.com/api/v10/";
 
@@ -14,6 +15,9 @@ serve({
     "/": home,
 });
 
+const env = await load();
+
+const BOT_TOKEN = env.BOT_TOKEN;
 async function home(request: Request) {
     const { error } = await validateRequest(request, {
         POST: {
@@ -152,8 +156,9 @@ async function  assignRole(guildId: string, userId: string, roleId: string) {
     // A successful role assignment typically returns a 204 No Content, so we don't need to parse JSON.
 }
 
-async function sendIntroMessage(channelId: string, bio: string, linkedin: string) {
-    const BOT_TOKEN = Deno.env.get("BOT_TOKEN");
+export async function sendIntroMessage(channelId: string, bio: string, linkedin: string) {
+    const envs = await env.load;
+    // const BOT_TOKEN = Deno.env.get("BOT_TOKEN")|| envs.BOT_TOKEN;
     if (!BOT_TOKEN) {
         throw new Error("BOT_TOKEN is not defined in the environment.");
     }
@@ -168,9 +173,9 @@ async function sendIntroMessage(channelId: string, bio: string, linkedin: string
             "Authorization": `Bot ${BOT_TOKEN}`,
             "Content-Type": "application/json",
         },
-        body: {
+        body: JSON.stringify({
             content:responseContent,
-        },
+        }),
     });
 
     if (!response.ok) {
