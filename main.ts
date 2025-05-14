@@ -17,7 +17,7 @@ serve({
 
 const env = await load();
 
-const BOT_TOKEN = env.BOT_TOKEN;
+const BOT_TOKEN = env.BOT_TOKEN|| Deno.env.get("BOT_TOKEN");
 async function home(request: Request) {
     const { error } = await validateRequest(request, {
         POST: {
