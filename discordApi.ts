@@ -35,7 +35,8 @@ export async function assignRole(
 export async function sendIntroMessage(
   channelId: string,
   bio: string,
-  linkedin: string,
+  linkedin: string | null,
+  userId: string,
 ) {
   if (!BOT_TOKEN) {
     throw new Error("BOT_TOKEN is not defined in the environment.");
@@ -43,8 +44,13 @@ export async function sendIntroMessage(
 
   const url = `${DISCORD_API_ENDPOINT}/channels/${channelId}/messages`;
 
-  const responseContent = `Hello!\n🔗 LinkedIn: ${linkedin}\n📝 Bio: ${bio}`;
-  console.log(responseContent);
+  const responseContentBeginning =
+    `.\n.\n.\nWelcome <@${userId}>👋\nHere's what they have to say about themselves\n\n${bio}\n\n`;
+  const linkedinSection = `You can find them on LinkedIn at:\n${linkedin}\n`;
+  const theEnd = ".\n.\n.\n";
+  const responseContent = responseContentBeginning +
+    (linkedin ? `${linkedinSection}` : "") + theEnd;
+
   const response = await fetch(url, {
     method: "POST",
     headers: {

@@ -34,14 +34,21 @@ async function getUserRows(): Promise<UsersRowData[]> {
 // Get the "Verified?" status for a specific email
 export async function getVerificationStatus(
   email: string,
-): Promise<{ verified: string; linkedin: string; bio: string } | "FALSE"> {
+): Promise<
+  | { verified: string; linkedin: string; bio: string }
+  | "FALSE"
+  | "Already Verified"
+> {
   const rows = await getUserRows();
   for (const row of rows) {
     if (row.get("Email Address") === email) {
+      if (row.get("Verified?") === "TRUE") {
+        return "Already Verified";
+      }
       row.set("Verified?", "TRUE");
       await row.save();
       return {
-        verified: row.get("Verified?"),
+        verified: "TRUE",
         linkedin: row.get(
           "LinkedIn Profile (Will be visible to other members)",
         ),

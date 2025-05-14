@@ -38,11 +38,10 @@ export async function home(request: Request) {
 
     const payload = await getVerificationStatus(value);
     const status = payload.verified;
-
-    let responseContent =
-      `Hello ${value}, The status of your registration is ${status}`;
-
-    if (status === "TRUE") {
+    let responseContent = "";
+    if (status === "Already Verified") {
+      responseContent += "Looks like you're already verified.";
+    } else if (status === "TRUE") {
       // If the verification status is true, attempt to assign the role.
       const roleId = DISCORD_ROLE_ID; // Get the Role ID from environment variables
       const guildId = guild_id;
@@ -64,9 +63,14 @@ export async function home(request: Request) {
       try {
         await assignRole(guildId, userId, roleId);
         responseContent =
-          `Hello ${value}, The status of your registration is ${status}. You have been assigned the verified role!`;
+          `Hello, You've been successfully verified and assigned the verified role!`;
         const introChannelId = INTRODUCTION_CHANNEL_ID;
-        await sendIntroMessage(introChannelId, payload.bio, payload.linkedin);
+        await sendIntroMessage(
+          introChannelId,
+          payload.bio,
+          payload.linkedin,
+          userId,
+        );
       } catch (error) {
         console.error("Error assigning role:", error);
         responseContent +=
