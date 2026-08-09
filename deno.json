@@ -1,6 +1,5 @@
 {
   "imports": {
-    "discord.js": "npm:discord.js@^14.19.3",
     "tweetnacl": "npm:tweetnacl@1.0.3"
   },
   "deploy": {

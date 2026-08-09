@@ -24,7 +24,7 @@ export async function home(request: Request) {
   }
   const { valid, body } = await verifySignature(request);
   if (!valid) {
-    return Response.json(
+    return json(
       { error: "Invalid request" },
       {
         status: 401,
@@ -33,10 +33,10 @@ export async function home(request: Request) {
   }
 
   const { type = 0, data = { options: [] }, guild_id, member = { user: {} } } =
-    Response.json.parse(body);
+    JSON.parse(body);
   // Discord performs Ping interactions to test our application.
   if (type === 1) {
-    return Response.json({
+    return json({
       type: 1,
     });
   }

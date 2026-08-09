@@ -9,7 +9,7 @@ export const DISCORD_ROLE_ID = Deno.env.get("DISCORD_ROLE_ID") ||
   env.DISCORD_ROLE_ID;
 export const INTRODUCTION_CHANNEL_ID =
   Deno.env.get("INTRODUCTION_CHANNEL_ID") || env.INTRODUCTION_CHANNEL_ID;
-export const DISCORD_API_ENDPOINT = "https://discord.com/api/v10/";
+export const DISCORD_API_ENDPOINT = "https://discord.com/api/v10";
 
 // Google Sheets API Keys
 export const CLIENT_EMAIL = Deno.env.get("CLIENT_EMAIL") || env.CLIENT_EMAIL;

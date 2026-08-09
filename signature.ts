@@ -1,4 +1,4 @@
-import nacl from "npm:tweetnacl@1.0.3";
+import nacl from "tweetnacl";
 import { DISCORD_PUBLIC_KEY } from "./env.ts";
 
 // this function verifies the signature of the request sent by discord to our server. It uses the public key provided by discord to verify the signature and timestamp included in the request headers.
