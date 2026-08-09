@@ -1,5 +1,8 @@
-import nacl from "https://esm.sh/tweetnacl@v1.0.3?dts";
+import nacl from "npm:tweetnacl@1.0.3";
 import { DISCORD_PUBLIC_KEY } from "./env.ts";
+
+// this function verifies the signature of the request sent by discord to our server. It uses the public key provided by discord to verify the signature and timestamp included in the request headers.
+// If the signature is valid, it returns true along with the request body; otherwise, it returns false.
 
 export async function verifySignature(
   request: Request,

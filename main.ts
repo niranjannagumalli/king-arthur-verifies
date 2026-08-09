@@ -1,7 +1,11 @@
-import { serve } from "https://deno.land/x/sift@0.6.0/mod.ts";
-import { home } from "./handler.ts"; 
+import { home } from "./handler.ts";
 
-// For all requests to "/" endpoint, we want to invoke home() handler.
-serve({
-  "/": home,
+// the request which hits the server is passed to the home function which is defined in handler.ts
+Deno.serve(async (request) => {
+  const url = new URL(request.url);
+  if (url.pathname === "/") {
+    return home(request);
+  } else {
+    return new Response("Not Found", { status: 404 });
+  }
 });

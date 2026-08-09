@@ -1,22 +1,30 @@
-import { json, validateRequest } from "https://deno.land/x/sift@0.6.0/mod.ts";
 import { verifySignature } from "./signature.ts";
 import { getVerificationStatus } from "./sheet.ts";
 import { assignRole, sendIntroMessage } from "./discordApi.ts";
 import { DISCORD_ROLE_ID, INTRODUCTION_CHANNEL_ID } from "./env.ts";
 
+// The home function handles incoming requests to the server. It verifies the request signature, checks the request type, and processes the verification status of a user based on their email.
+// If the user is verified, it assigns them a role in Discord and sends an introduction message to a specified channel.
 export async function home(request: Request) {
-  const { error } = await validateRequest(request, {
-    POST: {
-      headers: ["X-Signature-Ed25519", "X-Signature-Timestamp"],
-    },
-  });
-  if (error) {
-    return json({ error: error.message }, { status: error.status });
+  if (request.method !== "POST") {
+    return Response.json(
+      { error: "Method Not Allowed" },
+      { status: 405 },
+    );
   }
-
+  // these are the headers which are included in a request sent by discord.
+  if (
+    !request.headers.has("X-Signature-Ed25519") ||
+    !request.headers.has("X-Signature-Timestamp")
+  ) {
+    return Response.json(
+      { error: "Missing required headers" },
+      { status: 400 },
+    );
+  }
   const { valid, body } = await verifySignature(request);
   if (!valid) {
-    return json(
+    return Response.json(
       { error: "Invalid request" },
       {
         status: 401,
@@ -25,10 +33,10 @@ export async function home(request: Request) {
   }
 
   const { type = 0, data = { options: [] }, guild_id, member = { user: {} } } =
-    JSON.parse(body);
+    Response.json.parse(body);
   // Discord performs Ping interactions to test our application.
   if (type === 1) {
-    return json({
+    return Response.json({
       type: 1,
     });
   }
@@ -50,7 +58,7 @@ export async function home(request: Request) {
         console.error("DISCORD_ROLE_ID is not defined in the environment.");
         responseContent +=
           ", but I couldn't assign the role due to a configuration error.";
-        return json({
+        return Response.json({
           type: 4,
           data: {
             content: responseContent,
@@ -80,7 +88,7 @@ export async function home(request: Request) {
         "Hello, We did not find your email in the database. Could you please retry with your correct email id which you have filled in the form?";
     }
 
-    return json({
+    return Response.json({
       type: 4,
       data: {
         content: responseContent,
@@ -89,5 +97,5 @@ export async function home(request: Request) {
     });
   }
 
-  return json({ error: "bad request" }, { status: 400 });
+  return Response.json({ error: "bad request" }, { status: 400 });
 }
