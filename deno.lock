@@ -161,7 +161,6 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:discord.js@^14.19.3",
       "npm:tweetnacl@1.0.3"
     ]
   }

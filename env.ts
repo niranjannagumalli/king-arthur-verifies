@@ -13,5 +13,6 @@ export const DISCORD_API_ENDPOINT = "https://discord.com/api/v10";
 
 // Google Sheets API Keys
 export const CLIENT_EMAIL = Deno.env.get("CLIENT_EMAIL") || env.CLIENT_EMAIL;
-export const PRIVATE_KEY = Deno.env.get("PRIVATE_KEY") || env.PRIVATE_KEY;
+export const PRIVATE_KEY_BASE64 = Deno.env.get("PRIVATE_KEY_BASE64") || env.PRIVATE_KEY_BASE64;
+
 export const SHEET_ID = Deno.env.get("SHEET_ID") || env.SHEET_ID;
